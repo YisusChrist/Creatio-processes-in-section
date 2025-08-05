@@ -2,6 +2,8 @@
 
 List all the executed processes connected to a record from their form page in Freedom UI.
 
+<img width="1918" height="758" alt="image" src="https://github.com/user-attachments/assets/aa825fd5-4acb-4b6b-8169-79c1d502a3d1" />
+
 ## References:
 
 For creating the page:
