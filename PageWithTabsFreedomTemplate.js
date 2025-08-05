@@ -1,6 +1,18 @@
-define("PageWithTabsFreedomTemplate", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEMA_ARGS*/()/**SCHEMA_ARGS*/ {
+define("PageWithTabsFreedomTemplate", /**SCHEMA_DEPS*/["@creatio-devkit/common"]/**SCHEMA_DEPS*/, function/**SCHEMA_ARGS*/(sdk)/**SCHEMA_ARGS*/ {
     return {
         viewConfigDiff: /**SCHEMA_VIEW_CONFIG_DIFF*/[
+            {
+                "operation": "merge",
+                "name": "CardToggleTabPanel",
+                "values": {
+                    "styleType": "default",
+                    "bodyBackgroundColor": "primary-contrast-500",
+                    "selectedTabTitleColor": "auto",
+                    "tabTitleColor": "auto",
+                    "underlineSelectedTabColor": "auto",
+                    "headerBackgroundColor": "auto"
+                }
+            },
             {
                 "operation": "insert",
                 "name": "ProcessesTab",
@@ -335,8 +347,8 @@ define("PageWithTabsFreedomTemplate", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
                                     "loadOnChange": true
                                 },
                                 {
-                                    "loadOnChange": true,
-                                    "name": "ProcessesList_PredefinedFilter"
+                                    "name": "ProcessesList_PredefinedFilter",
+                                    "loadOnChange": true
                                 }
                             ]
                         },
@@ -375,78 +387,7 @@ define("PageWithTabsFreedomTemplate", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
                             }
                         }
                     },
-                    "ProcessesList_PredefinedFilter": {
-                        "value": {
-                            "items": {
-                                "masterRecordFilterWrapper": {
-                                    "filterType": 6,
-                                    "isEnabled": true,
-                                    "logicalOperation": 0,
-                                    "items": {
-                                        "masterRecordFilter": {
-                                            "filterType": 6,
-                                            "isEnabled": true,
-                                            "logicalOperation": 1,
-                                            "items": {
-                                                "entityFilter": {
-                                                    "filterType": 5,
-                                                    "comparisonType": 15,
-                                                    "isEnabled": true,
-                                                    "leftExpression": {
-                                                        "expressionType": 0,
-                                                        "columnPath": "[VwSysProcessEntity:SysProcess].Id"
-                                                    },
-                                                    "subFilters": {
-                                                        "filterType": 6,
-                                                        "isEnabled": true,
-                                                        "logicalOperation": 0,
-                                                        "items": {
-                                                            "EntityIdFilter": {
-                                                                "filterType": 1,
-                                                                "comparisonType": 3,
-                                                                "isEnabled": true,
-                                                                "leftExpression": {
-                                                                    "expressionType": 0,
-                                                                    "columnPath": "EntityId"
-                                                                },
-                                                                "rightExpression": {
-                                                                    "expressionType": 2,
-                                                                    "parameter": {
-                                                                        "dataValueType": 1,
-                                                                        "value": "47b777ca-4d1e-46f2-b2dc-22324202db2e"  // Case Id example
-                                                                    }
-                                                                }
-                                                            },
-                                                            "SchemaUidFilter": {
-                                                                "filterType": 1,
-                                                                "comparisonType": 3,
-                                                                "isEnabled": true,
-                                                                "leftExpression": {
-                                                                    "expressionType": 0,
-                                                                    "columnPath": "SysSchema.UId"
-                                                                },
-                                                                "rightExpression": {
-                                                                    "expressionType": 2,
-                                                                    "parameter": {
-                                                                        "dataValueType": 1,
-                                                                        "value": "117d32f9-8275-4534-8411-1c66115ce9cd"  // Case Schema UId
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "logicalOperation": 0,
-                            "isEnabled": true,
-                            "filterType": 6,
-                            "rootSchemaName": "VwSysProcessLog"
-                        }
-                    }
+                    "ProcessesList_PredefinedFilter": {}
                 }
             }
         ]/**SCHEMA_VIEW_MODEL_CONFIG_DIFF*/,
@@ -484,7 +425,113 @@ define("PageWithTabsFreedomTemplate", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, functi
                 }
             }
         ]/**SCHEMA_MODEL_CONFIG_DIFF*/,
-        handlers: /**SCHEMA_HANDLERS*/[]/**SCHEMA_HANDLERS*/,
+        handlers: /**SCHEMA_HANDLERS*/[
+            {
+                request: "crt.HandleViewModelInitRequest",
+                handler: async (request, next) => {
+                    // Get current record Id
+                    // window.location.href.split('/').filter(Boolean).pop() || null
+                    const MasterRecordId = await request.$context.Id;
+
+                    // Get current schema UId
+                    const SchemaUId = Terrasoft.configuration.ModuleStructure["Case"].entitySchemaUId;
+                    /*
+                    const schemaModel = await sdk.Model.create("SysSchema");
+                    const schemaData = await schemaModel.load({
+                        attributes: ["UId"],
+                        filters: {
+                            items: {
+                                byName: {
+                                    filterType: sdk.FilterType.Compare,
+                                    comparisonType: sdk.ComparisonType.Equal,
+                                    leftExpression: { expressionType: 0, columnPath: "Name" },
+                                    rightExpression: {
+                                        expressionType: 2,
+                                        parameter: { dataValueType: 1, value: "Case" }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    const SchemaUId = schemaData[0]?.UId;
+                    */
+                    request.$context.ProcessesList_PredefinedFilter = {
+                        "value": {
+                            "items": {
+                                "masterRecordFilterWrapper": {
+                                    "filterType": 6,
+                                    "isEnabled": true,
+                                    "logicalOperation": 0,
+                                    "items": {
+                                        "masterRecordFilter": {
+                                            "filterType": 6,
+                                            "isEnabled": true,
+                                            "logicalOperation": 1,
+                                            "items": {
+                                                "entityFilter": {
+                                                    "filterType": 5,
+                                                    "comparisonType": 15,
+                                                    "isEnabled": true,
+                                                    "leftExpression": {
+                                                        "expressionType": 0,
+                                                        "columnPath": "[VwSysProcessEntity:SysProcess].Id"
+                                                    },
+                                                    "subFilters": {
+                                                        "filterType": 6,
+                                                        "isEnabled": true,
+                                                        "logicalOperation": 0,
+                                                        "items": {
+                                                            "EntityIdFilter": {
+                                                                "filterType": 1,
+                                                                "comparisonType": 3,
+                                                                "isEnabled": true,
+                                                                "leftExpression": {
+                                                                    "expressionType": 0,
+                                                                    "columnPath": "EntityId"
+                                                                },
+                                                                "rightExpression": {
+                                                                    "expressionType": 2,
+                                                                    "parameter": {
+                                                                        "dataValueType": 1,
+                                                                        "value": MasterRecordId
+                                                                    }
+                                                                }
+                                                            },
+                                                            "SchemaUidFilter": {
+                                                                "filterType": 1,
+                                                                "comparisonType": 3,
+                                                                "isEnabled": true,
+                                                                "leftExpression": {
+                                                                    "expressionType": 0,
+                                                                    "columnPath": "SysSchema.UId"
+                                                                },
+                                                                "rightExpression": {
+                                                                    "expressionType": 2,
+                                                                    "parameter": {
+                                                                        "dataValueType": 1,
+                                                                        "value": SchemaUId
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "logicalOperation": 0,
+                            "isEnabled": true,
+                            "filterType": 6,
+                            "rootSchemaName": "VwSysProcessLog"
+                        }
+                    };
+
+                    return next?.handle(request);
+                },
+            },
+        ]/**SCHEMA_HANDLERS*/,
         converters: /**SCHEMA_CONVERTERS*/{}/**SCHEMA_CONVERTERS*/,
         validators: /**SCHEMA_VALIDATORS*/{}/**SCHEMA_VALIDATORS*/
     };
