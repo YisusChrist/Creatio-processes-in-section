@@ -16,3 +16,4 @@ For creating the list filter:
 - https://community.creatio.com/questions/how-filter-list-page-according-current-user-contact-type-freedom-ui-0
 - https://community.creatio.com/questions/filtering-list-view-freedom-ui
 - https://community.creatio.com/questions/custom-angular-component-issue-recordid-becomes-undefined-second-open
+- https://community.creatio.com/questions/get-schema-uid-freedom-page
