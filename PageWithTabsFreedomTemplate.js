@@ -424,7 +424,11 @@ define("PageWithTabsFreedomTemplate", /**SCHEMA_DEPS*/["@creatio-devkit/common"]
                     }
 
                     // Get current schema UId
-                    const SchemaName = request.$context?.dataSchemas?.PDS?.name || null;
+                    const PrimaryModelName = request.$context?._primaryModelName || null;
+                    if (!PrimaryModelName) {
+                        console.warn("Could not determine Primary Model Name for current page");
+                    }
+                    const SchemaName = request.$context?.dataSchemas[PrimaryModelName]?.name || null;
                     if (!SchemaName) {
                         console.warn("Could not determine Schema Name for current page");
                     }
